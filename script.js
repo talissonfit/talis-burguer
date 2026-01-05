@@ -155,21 +155,35 @@ checkoutBtn.addEventListener("click", function(){
     }
 
 
-    // Enviar o pedido para a API do Whatsapp
-    const cartItems = cart.map((item) => {
-        return (
-            ` ${item.name} Quantidade:(${item.quantity}) Preço: R$${item.price} l` 
-        )
+    // 1. O guarda de trânsito verifica o endereço 👮‍♂️
+    if (addressInput.value === "") {
+        const addressWarn = document.getElementById("address-warn")
+        
+        // Mostra o aviso (remove a classe que esconde)
+        addressWarn.classList.remove("hidden")
+        
+        // Espera 3 segundos e esconde de novo ⏱️
+        setTimeout(() => {
+            addressWarn.classList.add("hidden")
+        }, 3000)
 
+        return; // Para tudo e não envia o pedido! 🛑
+    }
+
+
+    // 2. Se chegou aqui, é porque tem endereço! Agora cria a lista:
+    const cartItems = cart.map((item) => {
+        return `${item.name}\nQtd: (${item.quantity})\nPreço: R$ ${item.price.toFixed(2)}\n----------\n`
     }).join("")
 
-    const message = encodeURIComponent(cartItems)
+    const fullMessage = `${cartItems} Endereço: ${addressInput.value}`
+    const message = encodeURIComponent(fullMessage)
     const phone = "12991896488"
 
-    window.open(`https://wa.me/${phone}?text=${message} Endereço: ${addressInput.value}`, "_blank")
+    window.open(`https://wa.me/${phone}?text=${message}`, "_blank")
+
     cart = [];
     updateCartModal();
-
 })
 
 
