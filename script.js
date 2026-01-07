@@ -58,6 +58,9 @@ function addToCart(name, price){
 function updateCartModal(){
     cartItemsContainer.innerHTML = "";
     let total = 0;
+    
+    // 1. Criei uma variável para somar a quantidade de itens
+    let totalItems = 0; 
 
     cart.forEach(item => {
         const cartItemElemnt = document.createElement("div");
@@ -79,16 +82,19 @@ function updateCartModal(){
 
         total += item.price * item.quantity;
 
+        // 2. Aqui a mágica acontece: somamos a quantidade de cada item
+        totalItems += item.quantity;
+
         cartItemsContainer.appendChild(cartItemElemnt)
     })
 
     carttotal.textContent = total.toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL"
-    
     });
 
-    cartCounter.innerHTML = cart.length;
+    // 3. Atualizamos o contador com a soma total
+    cartCounter.innerHTML = totalItems;
 
 }
 
